@@ -12,6 +12,18 @@ package parser {
     def parse(file: String): List[T]
   }
 
+  object Parser {
+    import csv._
+    import json._
+
+    def apply(filename: String): Parser[Person] =
+      filename match {
+        case f if f.endsWith(".json") => new JsonParser
+        case f if f.endsWith(".csv") => new CSVParser
+        case f => throw new RuntimeException(s"Unknown format: $f")
+      }
+  }
+
   package csv {
     import com.github.tototoshi.csv._
     import java.io.{ InputStreamReader }
